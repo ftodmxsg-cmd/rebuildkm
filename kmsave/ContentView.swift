@@ -71,105 +71,127 @@ struct ContentView: View {
     
     private var searchFieldsOverlay: some View {
         VStack(spacing: 0) {
-            // App name/logo
-            HStack {
-                Image(systemName: "location.circle.fill")
-                    .foregroundColor(.orange)
-                    .font(.title2)
+            // App name/current location
+            HStack(spacing: 8) {
+                // Orange circle with user icon
+                ZStack {
+                    Circle()
+                        .fill(Color.orange)
+                        .frame(width: 32, height: 32)
+                    
+                    Image(systemName: "person.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(.white)
+                }
+                
                 Text("TONGA ROOM &")
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(.orange)
+                
                 Spacer()
             }
-            .padding(.horizontal)
-            .padding(.top, 8)
-            .padding(.bottom, 4)
+            .padding(.horizontal, 16)
+            .padding(.top, 12)
+            .padding(.bottom, 8)
             
             // Start location field
             HStack(spacing: 12) {
-                Image(systemName: "circle.fill")
-                    .font(.system(size: 12))
-                    .foregroundColor(.blue)
+                // Blue filled circle
+                Circle()
+                    .fill(Color.blue)
+                    .frame(width: 12, height: 12)
+                    .padding(.leading, 4)
                 
                 Text(startLocation.isEmpty ? "Start location" : startLocation)
                     .font(.system(size: 17))
-                    .foregroundColor(startLocation.isEmpty ? .gray : .primary)
+                    .foregroundColor(startLocation.isEmpty ? Color(uiColor: .placeholderText) : .primary)
                 
                 Spacer()
                 
+                // Navigation arrow button
                 Button(action: {
-                    // Navigate to current location
+                    // Use current location as start
+                    if let location = locationManager.currentLocation {
+                        startLocation = "Current location"
+                    }
                 }) {
                     Image(systemName: "location.fill")
-                        .foregroundColor(.blue)
                         .font(.system(size: 20))
+                        .foregroundColor(.blue)
                 }
             }
-            .padding()
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
             .background(Color(uiColor: .systemBackground))
             
-            // Divider
+            // Divider line
             Rectangle()
-                .fill(Color.gray.opacity(0.2))
-                .frame(height: 1)
+                .fill(Color(uiColor: .separator).opacity(0.5))
+                .frame(height: 0.5)
                 .padding(.leading, 44)
             
             // End location field
             HStack(spacing: 12) {
-                Image(systemName: "circle.fill")
-                    .font(.system(size: 12))
-                    .foregroundColor(.red)
+                // Red filled circle
+                Circle()
+                    .fill(Color.red)
+                    .frame(width: 12, height: 12)
+                    .padding(.leading, 4)
                 
                 Button(action: {
                     isSearchingEnd = true
                     showingLocationSearch = true
                 }) {
-                    Text(endLocation.isEmpty ? "End location" : endLocation)
-                        .font(.system(size: 17))
-                        .foregroundColor(endLocation.isEmpty ? .gray : .primary)
+                    HStack {
+                        Text(endLocation.isEmpty ? "End location" : endLocation)
+                            .font(.system(size: 17))
+                            .foregroundColor(endLocation.isEmpty ? Color(uiColor: .placeholderText) : .primary)
+                        Spacer()
+                    }
                 }
                 
-                Spacer()
-                
+                // Clear button (X in circle)
                 if !endLocation.isEmpty {
                     Button(action: {
                         endLocation = ""
                         selectedDestination = nil
                     }) {
                         Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.gray)
                             .font(.system(size: 20))
+                            .foregroundColor(Color(uiColor: .tertiaryLabel))
                     }
                 }
             }
-            .padding()
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
             .background(Color(uiColor: .systemBackground))
         }
         .background(Color(uiColor: .systemBackground))
-        .cornerRadius(12, corners: [.bottomLeft, .bottomRight])
-        .shadow(color: .black.opacity(0.1), radius: 10, y: 5)
-        .padding(.horizontal, 8)
+        .cornerRadius(16, corners: [.bottomLeft, .bottomRight])
+        .shadow(color: .black.opacity(0.08), radius: 8, y: 2)
+        .padding(.horizontal, 12)
         .padding(.top, 8)
     }
     
     // MARK: - Speed Indicator
     
     private var speedIndicator: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 2) {
             Text("\(Int(currentSpeed))")
-                .font(.system(size: 48, weight: .medium))
+                .font(.system(size: 44, weight: .regular))
                 .foregroundColor(.white)
             
             Text("km/h")
-                .font(.system(size: 14))
+                .font(.system(size: 13, weight: .regular))
                 .foregroundColor(.white.opacity(0.9))
         }
-        .frame(width: 100, height: 100)
+        .frame(width: 90, height: 90)
         .background(
             Circle()
-                .fill(Color.black.opacity(0.7))
+                .fill(Color.black.opacity(0.75))
         )
-        .padding(.leading, 20)
+        .shadow(color: .black.opacity(0.2), radius: 4, y: 2)
+        .padding(.leading, 16)
         .padding(.bottom, 100)
         .onChange(of: locationManager.currentLocation) { newLocation in
             if let location = newLocation, location.speed >= 0 {
@@ -189,17 +211,17 @@ struct ContentView: View {
             }
         }) {
             Image(systemName: "location.fill")
-                .font(.system(size: 28))
+                .font(.system(size: 26, weight: .medium))
                 .foregroundColor(.white)
-                .frame(width: 60, height: 60)
+                .frame(width: 56, height: 56)
                 .background(
                     Circle()
-                        .fill(endLocation.isEmpty ? Color.gray : Color.blue)
+                        .fill(endLocation.isEmpty ? Color.gray.opacity(0.5) : Color.blue)
                 )
-                .shadow(color: .black.opacity(0.2), radius: 8, y: 4)
+                .shadow(color: .black.opacity(0.15), radius: 6, y: 3)
         }
         .disabled(endLocation.isEmpty)
-        .padding(.trailing, 20)
+        .padding(.trailing, 16)
         .padding(.bottom, 100)
     }
     
@@ -207,7 +229,7 @@ struct ContentView: View {
     
     private var bottomTabBar: some View {
         HStack(spacing: 0) {
-            // Home tab
+            // Home tab - Map icon
             TabBarButton(
                 icon: "map.fill",
                 title: "Home",
@@ -216,7 +238,7 @@ struct ContentView: View {
                 selectedTab = 0
             }
             
-            // Plan Trip tab
+            // Plan Trip tab - Compass/navigation icon
             TabBarButton(
                 icon: "location.north.fill",
                 title: "Plan Trip",
@@ -225,7 +247,7 @@ struct ContentView: View {
                 selectedTab = 1
             }
             
-            // Spending tab
+            // Spending tab - Dollar sign
             TabBarButton(
                 icon: "dollarsign.circle.fill",
                 title: "Spending",
@@ -234,7 +256,7 @@ struct ContentView: View {
                 selectedTab = 2
             }
             
-            // Settings tab
+            // Settings tab - Gear icon
             TabBarButton(
                 icon: "gearshape.fill",
                 title: "Settings",
@@ -243,11 +265,12 @@ struct ContentView: View {
                 selectedTab = 3
             }
         }
-        .padding(.top, 8)
+        .frame(height: 60)
         .background(
             Color(uiColor: .systemBackground)
-                .shadow(color: .black.opacity(0.1), radius: 10, y: -5)
+                .shadow(color: .black.opacity(0.08), radius: 8, y: -2)
         )
+        .edgesIgnoringSafeArea(.bottom)
     }
     
     // MARK: - Helper Methods
@@ -270,14 +293,15 @@ struct TabBarButton: View {
         Button(action: action) {
             VStack(spacing: 4) {
                 Image(systemName: icon)
-                    .font(.system(size: 24))
+                    .font(.system(size: 22, weight: .medium))
                 
                 Text(title)
-                    .font(.system(size: 11))
+                    .font(.system(size: 10, weight: .medium))
             }
-            .foregroundColor(isSelected ? .blue : .gray)
+            .foregroundColor(isSelected ? .blue : Color(uiColor: .secondaryLabel))
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
+            .contentShape(Rectangle())
         }
     }
 }
