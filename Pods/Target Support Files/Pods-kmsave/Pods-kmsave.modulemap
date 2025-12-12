@@ -1,0 +1,6 @@
+framework module Pods_kmsave {
+  umbrella header "Pods-kmsave-umbrella.h"
+
+  export *
+  module * { export * }
+}
