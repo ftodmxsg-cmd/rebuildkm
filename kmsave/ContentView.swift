@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var showingRouteSelection = false
+    
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
@@ -16,23 +18,45 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                // Navigation to Map View
-                NavigationLink(destination: MapView()) {
-                    HStack {
-                        Image(systemName: "map.fill")
-                        Text("Open Map")
+                // Main action buttons
+                VStack(spacing: 16) {
+                    // Navigate button
+                    Button(action: {
+                        showingRouteSelection = true
+                    }) {
+                        HStack {
+                            Image(systemName: "location.fill.viewfinder")
+                            Text("Start Navigation")
+                                .fontWeight(.semibold)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                    
+                    // Open Map button
+                    NavigationLink(destination: MapView()) {
+                        HStack {
+                            Image(systemName: "map.fill")
+                            Text("View Map")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                    }
                 }
                 .padding(.horizontal, 40)
                 
                 Spacer()
             }
             .navigationBarHidden(true)
+        }
+        .sheet(isPresented: $showingRouteSelection) {
+            RouteSelectionView()
         }
     }
 }
