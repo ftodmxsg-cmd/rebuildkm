@@ -1,0 +1,205 @@
+# Important rules you HAVE TO FOLLOW
+- Always add debug logs & comments in the code for easier debug & readability
+- Every time you choose to apply a rule(s), explicitly state the rule{s} in the output. You can abbreviate the rule description to a single word or phrase
+- Do not make any changes, until you have 95% confidence that you know what to build. Ask me follow up questions until you have that confidence.
+
+# Project structure
+- All the files go inside /kmsave
+- The main swift file is kmsaveApp.swift
+
+# Tech Stack
+- SwiftUI for frontend (Fallback with UIKit if absolutely necessary)
+- Swift for code and logic
+- iOS only
+- Supabase for database
+- RevenueCat for monetization
+- TelemetryDeck for analytics
+
+# Swift specific rules
+
+## 0. General Coding
+- Always prefer simple solutions
+- Avoid duplication of code whenever possible, which means checking for other areas of the codebase that might already have similar code and functionality
+- Write code that takes into account the different environments: dev, test, and prod
+- You are careful to only make changes that are requested or you are confident are well understood and related to the change being requested
+- When fixing an issue or bug, do not introduce a new pattern or technology without first exhausting all options for the existing implementation. And if you finally do this, make sure to remove the old implementation afterwards so we don't have duplicate logic.
+- Keep the codebase very clean and organized
+- Avoid writing scripts in files if possible, especially if the script is likely only to be run once
+- Avoid having files over 200-300 lines of code. Refactor at that point.
+- Mocking data is only needed for tests, never mock data for dev or prod
+- Never add stubbing or fake data patterns to code that affects the dev or prod environments
+- Never overwrite my .env file without first asking and confirming
+
+
+## 1. State Management
+
+- Use appropriate property wrappers and macros:
+  - Annotate view models with `@Observable`, e.g. `@Observable final class MyModel`.
+  - Do not use @State in the SwiftUI View for view model observation. Instead, use `let model: MyModel`.
+  - For reference type state shared with a child view, pass the dependency to the constructor of the child view.
+  - For value type state shared with a child view, use SwiftUI bindings if and only if the child needs write access to the state.
+  - For value type state shared with a child view, pass the value if the child view only needs read access to the state.
+  - Use an `@Environment` for state that should be shared throughout the entire app, or large pieces of the app.
+  - Use `@State` only for local state that is managed by the view itself.
+
+## 2. Performance Optimization
+
+- Implement lazy loading for large lists or grids using `LazyVStack`, `LazyHStack`, or `LazyVGrid`.
+- Optimize ForEach loops by using stable identifiers.
+
+
+## 5. SwiftUI Lifecycle
+
+- Use `@main` and `App` protocol for the app's entry point.
+- Implement `Scene`s for managing app structure.
+- Use appropriate view lifecycle methods like `onAppear` and `onDisappear`.
+
+## 6. Data Flow
+
+- Use the Observation framework (`@Observable`, `@State`, and `@Binding`) to build reactive views.
+- Implement proper error handling and propagation.
+
+## 7. Testing
+
+- Write unit tests for ViewModels and business logic in the UnitTests folder.
+- Implement UI tests for critical user flows in the UITests folder.
+- Use Preview providers for rapid UI iteration and testing.
+
+## 8. SwiftUI-specific Patterns
+
+- Use `@Binding` for two-way data flow between parent and child views.
+- Implement custom `PreferenceKey`s for child-to-parent communication.
+- Utilize `@Environment` for dependency injection.
+
+## 9. Security
+
+- Follow best practices to building a secure app.
+- Don't expose sensitive information in network requests.
+- Don't store sensitive information insecurely on device.
+
+## 10. Declarations
+- Before declaring a new struct or class, make sure it doesn't already exist in the project.
+
+## 11. No Modules
+- Don't create extra modules or packages. Keep all files in the same target and project.
+
+## 12. API Security
+- # 🔒 SECURITY RULE: API Key and Secrets Protection
+
+## NEVER Read These Files Directly:
+- Secrets.xcconfig
+- Config/Secrets.xcconfig
+- **/Secrets.xcconfig
+- .env
+- .env.local
+- .env.production
+- APIKeys.plist
+- Any file containing "API_KEY", "SECRET", "TOKEN", or "PASSWORD" in variable names
+
+## When User Asks About API Key Security:
+
+### DO:
+1. Check if the file is listed in `.gitignore` (read .gitignore only)
+2. Use `git check-ignore <filename>` command to verify
+3. Check if git is initialized (`ls -la | grep .git`)
+4. Verify .gitignore patterns without reading the actual secrets file
+5. Provide security checklist and best practices
+
+### DO NOT:
+1. Read Secrets.xcconfig or any file containing API keys
+2. Display API key contents in responses
+3. Log or echo sensitive environment variables
+4. Include actual key values in examples or troubleshooting
+
+## Example Response Pattern:
+
+**User asks:** "Is my API key secure?"
+
+**Correct response:**
+- ✅ Check `.gitignore` for `Secrets.xcconfig` pattern
+- ✅ Verify with: `git check-ignore Secrets.xcconfig`
+- ✅ Provide security checklist without reading the file
+- ❌ DO NOT read `Secrets.xcconfig` contents
+
+**User asks:** "Why isn't my API key working?"
+
+**Correct response:**
+- Ask user to verify: "Does your Secrets.xcconfig file exist?"
+- Ask: "Is the format correct: `GOOGLE_MAPS_API_KEY = YOUR_KEY`?"
+- Check Info.plist for $(GOOGLE_MAPS_API_KEY) reference
+- Check Xcode scheme environment variables
+- ❌ DO NOT ask to see the actual key
+
+## Security Verification Commands (Safe to Use):
+# Check if file is ignored
+git check-ignore Secrets.xcconfig
+
+# Check if file exists (without reading)
+[ -f Secrets.xcconfig ] && echo "File exists" || echo "File missing"
+
+# Check .gitignore patterns
+grep -i "secret" .gitignore
+
+# Verify file is not tracked
+git ls-files | grep -i secret## Exceptions:
+- Reading `.gitignore` is ALWAYS safe
+- Reading `Secrets.example.xcconfig` (template with placeholders) is safe
+- Reading documentation files about security is safe
+
+## If User Explicitly Asks to Read Secrets File:
+Respond with:
+"⚠️ Security Warning: I should not read files containing API keys. Instead, I can:
+1. Help you verify the file format without reading it
+2. Check if it's properly protected in .gitignore
+3. Provide troubleshooting steps that don't require seeing the key
+Would you like me to do one of these instead?"
+
+## 13. Version Control & GitHub CLI
+
+### GitHub CLI Setup (REQUIRED for all projects)
+- **ALWAYS verify GitHub CLI is installed and authenticated before starting ANY project**
+- At the start of every new project or when setting up Git, check:
+  1. GitHub CLI is installed: `gh --version`
+  2. User is authenticated: `gh auth status`
+  3. If not authenticated, run: `gh auth login`
+
+### When to Check GitHub CLI:
+- ✅ Before initializing any new project
+- ✅ When setting up Git for the first time
+- ✅ Before creating or pushing to GitHub repositories
+- ✅ At the start of any session involving Git/GitHub operations
+
+### GitHub CLI Commands to Use:
+```bash
+# Check if installed
+gh --version
+
+# Check authentication status
+gh auth status
+
+# Login if needed
+gh auth login
+
+# Create and push repository
+gh repo create PROJECT_NAME --public --source=. --remote=origin --push
+# or for private:
+gh repo create PROJECT_NAME --private --source=. --remote=origin --push
+```
+
+### Git Initialization Workflow:
+1. Check GitHub CLI is authenticated first
+2. Initialize Git: `git init`
+3. Verify secrets are in `.gitignore`
+4. Make initial commit
+5. Use GitHub CLI to create and push repository
+
+### DO NOT:
+- Start Git operations without verifying GitHub CLI setup
+- Manually configure Git remotes when GitHub CLI can do it automatically
+- Skip authentication verification
+
+### Benefits:
+- Streamlined repository creation
+- Automatic remote configuration
+- Consistent authentication across projects
+- Faster project setup
