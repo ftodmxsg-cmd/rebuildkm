@@ -8,20 +8,31 @@ struct MapView: View {
     var showUserLocation: Bool = true
     
     var body: some View {
-        ZStack {
-            GoogleMapView(
-                isReady: $isMapReady,
-                route: route,
-                currentLocation: currentLocation,
-                showUserLocation: showUserLocation
-            )
-            .edgesIgnoringSafeArea(.all)
-            
-            if !isMapReady {
-                ProgressView("Loading Map...")
+        GeometryReader { geometry in
+            ZStack {
+                GoogleMapView(
+                    isReady: $isMapReady,
+                    route: route,
+                    currentLocation: currentLocation,
+                    showUserLocation: showUserLocation
+                )
+                .frame(width: geometry.size.width, height: geometry.size.height)
+                .edgesIgnoringSafeArea(.all)
+                .onAppear {
+                    print("🗺️ DEBUG: MapView appeared with size: \(geometry.size)")
+                }
+                
+                if !isMapReady {
+                    VStack {
+                        ProgressView("Loading Map...")
+                        Text("Size: \(Int(geometry.size.width))x\(Int(geometry.size.height))")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                     .padding()
                     .background(Color.white.opacity(0.9))
                     .cornerRadius(10)
+                }
             }
         }
         .navigationTitle("Map")
@@ -42,8 +53,12 @@ struct GoogleMapView: UIViewRepresentable {
     )
     
     func makeUIView(context: Context) -> GMSMapView {
+        print("🗺️ DEBUG: Creating GMSMapView")
+        
         // Create camera positioned at Singapore or current location
         let cameraLocation = currentLocation?.coordinate ?? defaultLocation
+        print("🗺️ DEBUG: Camera location - lat: \(cameraLocation.latitude), lon: \(cameraLocation.longitude)")
+        
         let camera = GMSCameraPosition.camera(
             withLatitude: cameraLocation.latitude,
             longitude: cameraLocation.longitude,
@@ -52,6 +67,9 @@ struct GoogleMapView: UIViewRepresentable {
         
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         mapView.delegate = context.coordinator
+        
+        // Set background color to verify the view is rendering
+        mapView.backgroundColor = .systemBackground
         
         // Map settings
         mapView.isMyLocationEnabled = showUserLocation
@@ -68,22 +86,29 @@ struct GoogleMapView: UIViewRepresentable {
             mapView.settings.zoomGestures = true
         }
         
+        print("🗺️ DEBUG: GMSMapView created successfully")
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            isReady = true
+            self.isReady = true
+            print("🗺️ DEBUG: Map marked as ready")
         }
         
         return mapView
     }
     
     func updateUIView(_ mapView: GMSMapView, context: Context) {
+        print("🗺️ DEBUG: updateUIView called")
+        
         // Clear existing overlays
         mapView.clear()
         
         // Draw route if available
         if let route = route {
+            print("🗺️ DEBUG: Drawing route")
             drawRoute(on: mapView, route: route)
         } else {
             // Add a marker at default location if no route
+            print("🗺️ DEBUG: Adding default marker at Singapore")
             let marker = GMSMarker()
             marker.position = defaultLocation
             marker.title = "Singapore"
@@ -93,6 +118,7 @@ struct GoogleMapView: UIViewRepresentable {
         
         // Update camera to show current location if available
         if let location = currentLocation, route == nil {
+            print("🗺️ DEBUG: Animating to current location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
             let camera = GMSCameraPosition.camera(
                 withLatitude: location.coordinate.latitude,
                 longitude: location.coordinate.longitude,
