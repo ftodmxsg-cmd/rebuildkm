@@ -25,9 +25,10 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         locationManager.activityType = .automotiveNavigation
         locationManager.pausesLocationUpdatesAutomatically = false
         
-        // Allow background location updates for navigation
-        locationManager.allowsBackgroundLocationUpdates = true
-        locationManager.showsBackgroundLocationIndicator = true
+        // Background location updates require Background Modes capability
+        // Enable only if capability is configured in Xcode
+        // locationManager.allowsBackgroundLocationUpdates = true
+        // locationManager.showsBackgroundLocationIndicator = true
         
         authorizationStatus = locationManager.authorizationStatus
         
