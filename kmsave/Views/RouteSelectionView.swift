@@ -13,6 +13,8 @@ struct RouteSelectionView: View {
     @State private var route: Route?
     @State private var errorMessage: String?
     @State private var showingNavigationView = false
+    @State private var showingLocationSearch = false
+    @State private var selectedDestination: PlaceDetails?
     
     // Sample destinations for Singapore
     private let suggestedDestinations = [
@@ -61,6 +63,16 @@ struct RouteSelectionView: View {
                 ActiveNavigationView(route: route, locationManager: locationManager)
             }
         }
+        .sheet(isPresented: $showingLocationSearch) {
+            LocationSearchView(locationManager: locationManager) { placeDetails in
+                handleDestinationSelected(placeDetails)
+            }
+        }
+        .onChange(of: selectedDestination) { destination in
+            if let destination = destination {
+                fetchRoute(to: destination.coordinate, name: destination.name)
+            }
+        }
     }
     
     // MARK: - Header
@@ -102,6 +114,9 @@ struct RouteSelectionView: View {
                     // Current location
                     currentLocationSection
                     
+                    // Search button
+                    searchButton
+                    
                     // Suggested destinations
                     suggestedDestinationsSection
                     
@@ -131,19 +146,45 @@ struct RouteSelectionView: View {
         .shadow(radius: 10)
     }
     
+    // MARK: - Search Button
+    
+    private var searchButton: some View {
+        Button(action: {
+            showingLocationSearch = true
+        }) {
+            HStack(spacing: 12) {
+                Image(systemName: "magnifyingglass")
+                    .font(.system(size: 20))
+                    .foregroundColor(.gray)
+                
+                Text("Search for a destination")
+                    .font(.body)
+                    .foregroundColor(.gray)
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.secondary)
+            }
+            .padding()
+            .background(Color(uiColor: .secondarySystemBackground))
+            .cornerRadius(12)
+        }
+    }
+    
     // MARK: - Current Location Section
     
     private var currentLocationSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             Label("Current Location", systemImage: "location.fill")
                 .font(.headline)
-                .foregroundColor(.blue)
-            
-            if let location = locationManager.currentLocation {
+                    .foregroundColor(.blue)
+                
+                if let location = locationManager.currentLocation {
                 Text("Lat: \(location.coordinate.latitude, specifier: "%.4f"), Lon: \(location.coordinate.longitude, specifier: "%.4f")")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            } else {
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                } else {
                 Text("Fetching your location...")
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -174,8 +215,8 @@ struct RouteSelectionView: View {
                         if isLoadingRoute {
                             ProgressView()
                         } else {
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.secondary)
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.secondary)
                         }
                     }
                     .padding()
@@ -194,28 +235,28 @@ struct RouteSelectionView: View {
             Text("Route Overview")
                 .font(.headline)
             
-            HStack(spacing: 20) {
-                VStack {
+                HStack(spacing: 20) {
+                    VStack {
                     Image(systemName: "arrow.triangle.turn.up.right.circle.fill")
                         .font(.title)
-                        .foregroundColor(.blue)
+                            .foregroundColor(.blue)
                     Text(route.distance.text)
-                        .font(.headline)
-                    Text("Distance")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                
-                VStack {
+                            .font(.headline)
+                        Text("Distance")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    VStack {
                     Image(systemName: "clock.fill")
                         .font(.title)
-                        .foregroundColor(.green)
+                            .foregroundColor(.green)
                     Text(route.duration.text)
-                        .font(.headline)
-                    Text("Duration")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
+                            .font(.headline)
+                        Text("Duration")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
                 
                 VStack {
                     Image(systemName: "arrow.right.circle.fill")
@@ -229,7 +270,7 @@ struct RouteSelectionView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .padding()
+                .padding()
             .background(Color(uiColor: .secondarySystemBackground))
             .cornerRadius(12)
         }
@@ -241,15 +282,15 @@ struct RouteSelectionView: View {
         Button(action: {
             showingNavigationView = true
         }) {
-            HStack {
-                Image(systemName: "location.fill")
-                Text("Start Navigation")
-                    .fontWeight(.semibold)
-            }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
+                    HStack {
+                        Image(systemName: "location.fill")
+                        Text("Start Navigation")
+                            .fontWeight(.semibold)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
             .cornerRadius(12)
         }
     }
@@ -281,6 +322,13 @@ struct RouteSelectionView: View {
                 }
             }
         }
+    }
+    
+    // MARK: - Handle Destination Selection
+    
+    private func handleDestinationSelected(_ destination: PlaceDetails) {
+        selectedDestination = destination
+        print("🗺️ DEBUG: Destination selected from search - \(destination.name)")
     }
 }
 

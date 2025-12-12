@@ -18,6 +18,8 @@
 		A100000018 /* VoiceGuidanceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000019 /* VoiceGuidanceService.swift */; };
 		A100000020 /* RouteSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000021 /* RouteSelectionView.swift */; };
 		A100000022 /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000023 /* NavigationView.swift */; };
+		A100000024 /* PlacesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000025 /* PlacesService.swift */; };
+		A100000026 /* LocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000027 /* LocationSearchView.swift */; };
 		B7C89E4F89 /* Pods_kmsave.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8B2C3D4E /* Pods_kmsave.framework */; };
 /* End PBXBuildFile section */
 
@@ -35,6 +37,8 @@
 		A100000019 /* VoiceGuidanceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceGuidanceService.swift; sourceTree = "<group>"; };
 		A100000021 /* RouteSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSelectionView.swift; sourceTree = "<group>"; };
 		A100000023 /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
+		A100000025 /* PlacesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesService.swift; sourceTree = "<group>"; };
+		A100000027 /* LocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchView.swift; sourceTree = "<group>"; };
 		A1FFFFFFFF /* kmsave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kmsave.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8D1E2F3A4 /* Pods-kmsave.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kmsave.debug.xcconfig"; path = "Target Support Files/Pods-kmsave/Pods-kmsave.debug.xcconfig"; sourceTree = "<group>"; };
 		D9E2F3A4B5 /* Pods-kmsave.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kmsave.release.xcconfig"; path = "Target Support Files/Pods-kmsave/Pods-kmsave.release.xcconfig"; sourceTree = "<group>"; };
@@ -59,6 +63,7 @@
 				A100000006 /* MapView.swift */,
 				A100000021 /* RouteSelectionView.swift */,
 				A100000023 /* NavigationView.swift */,
+				A100000027 /* LocationSearchView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -70,6 +75,7 @@
 				A100000015 /* DirectionsService.swift */,
 				A100000017 /* NavigationEngine.swift */,
 				A100000019 /* VoiceGuidanceService.swift */,
+				A100000025 /* PlacesService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -255,6 +261,8 @@
 				A100000018 /* VoiceGuidanceService.swift in Sources */,
 				A100000020 /* RouteSelectionView.swift in Sources */,
 				A100000022 /* NavigationView.swift in Sources */,
+				A100000024 /* PlacesService.swift in Sources */,
+				A100000026 /* LocationSearchView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
