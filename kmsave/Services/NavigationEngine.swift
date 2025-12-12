@@ -1,12 +1,12 @@
 import Foundation
 import CoreLocation
 import GoogleMaps
-import Observation
+import Combine
 
 /// Core navigation engine that tracks user progress and manages navigation state
-@Observable final class NavigationEngine {
+class NavigationEngine: ObservableObject {
     // MARK: - Properties
-    var navigationState: NavigationState
+    @Published var navigationState: NavigationState
     var onInstructionUpdate: ((String, Int) -> Void)?
     var onStepCompleted: (() -> Void)?
     var onNavigationCompleted: (() -> Void)?

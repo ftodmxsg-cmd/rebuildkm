@@ -1,16 +1,16 @@
 import Foundation
 import CoreLocation
-import Observation
+import Combine
 
 /// Manages location services for the app
 /// Handles location updates, permissions, and heading information
-@Observable final class LocationManager: NSObject, CLLocationManagerDelegate {
+class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     // MARK: - Published Properties
-    var currentLocation: CLLocation?
-    var heading: CLHeading?
-    var authorizationStatus: CLAuthorizationStatus = .notDetermined
-    var locationError: Error?
-    var isUpdatingLocation = false
+    @Published var currentLocation: CLLocation?
+    @Published var heading: CLHeading?
+    @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
+    @Published var locationError: Error?
+    @Published var isUpdatingLocation = false
     
     // MARK: - Private Properties
     private let locationManager = CLLocationManager()

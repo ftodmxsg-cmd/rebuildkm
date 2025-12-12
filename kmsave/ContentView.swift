@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var locationManager = LocationManager()
     @State private var showingRouteSelection = false
     
     var body: some View {
@@ -56,7 +57,7 @@ struct ContentView: View {
             .navigationBarHidden(true)
         }
         .sheet(isPresented: $showingRouteSelection) {
-            RouteSelectionView()
+            RouteSelectionView(locationManager: locationManager)
         }
     }
 }

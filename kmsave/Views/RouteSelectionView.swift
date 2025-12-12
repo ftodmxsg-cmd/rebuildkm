@@ -5,7 +5,7 @@ import GoogleMaps
 /// View for selecting destination and viewing route preview
 struct RouteSelectionView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var locationManager = LocationManager()
+    @ObservedObject var locationManager: LocationManager
     @State private var directionsService: DirectionsService
     
     @State private var destinationAddress = ""
@@ -22,7 +22,8 @@ struct RouteSelectionView: View {
         ("Orchard Road", CLLocationCoordinate2D(latitude: 1.3048, longitude: 103.8318))
     ]
     
-    init() {
+    init(locationManager: LocationManager) {
+        self.locationManager = locationManager
         // Get API key from environment or plist
         let apiKey = ProcessInfo.processInfo.environment["GOOGLE_MAPS_API_KEY"] 
             ?? Bundle.main.object(forInfoDictionaryKey: "GoogleMapsAPIKey") as? String 
@@ -57,7 +58,7 @@ struct RouteSelectionView: View {
         }
         .sheet(isPresented: $showingNavigationView) {
             if let route = route {
-                NavigationView(route: route, locationManager: locationManager)
+                ActiveNavigationView(route: route, locationManager: locationManager)
             }
         }
     }

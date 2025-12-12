@@ -11,6 +11,13 @@
 		A100000003 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000004 /* ContentView.swift */; };
 		A100000005 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000006 /* MapView.swift */; };
 		A100000007 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A100000008 /* Assets.xcassets */; };
+		A100000010 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000011 /* LocationManager.swift */; };
+		A100000012 /* NavigationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000013 /* NavigationModels.swift */; };
+		A100000014 /* DirectionsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000015 /* DirectionsService.swift */; };
+		A100000016 /* NavigationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000017 /* NavigationEngine.swift */; };
+		A100000018 /* VoiceGuidanceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000019 /* VoiceGuidanceService.swift */; };
+		A100000020 /* RouteSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000021 /* RouteSelectionView.swift */; };
+		A100000022 /* NavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A100000023 /* NavigationView.swift */; };
 		B7C89E4F89 /* Pods_kmsave.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A8B2C3D4E /* Pods_kmsave.framework */; };
 /* End PBXBuildFile section */
 
@@ -21,6 +28,13 @@
 		A100000006 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		A100000008 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A100000009 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A100000011 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		A100000013 /* NavigationModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationModels.swift; sourceTree = "<group>"; };
+		A100000015 /* DirectionsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsService.swift; sourceTree = "<group>"; };
+		A100000017 /* NavigationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationEngine.swift; sourceTree = "<group>"; };
+		A100000019 /* VoiceGuidanceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceGuidanceService.swift; sourceTree = "<group>"; };
+		A100000021 /* RouteSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSelectionView.swift; sourceTree = "<group>"; };
+		A100000023 /* NavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationView.swift; sourceTree = "<group>"; };
 		A1FFFFFFFF /* kmsave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kmsave.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8D1E2F3A4 /* Pods-kmsave.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kmsave.debug.xcconfig"; path = "Target Support Files/Pods-kmsave/Pods-kmsave.debug.xcconfig"; sourceTree = "<group>"; };
 		D9E2F3A4B5 /* Pods-kmsave.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kmsave.release.xcconfig"; path = "Target Support Files/Pods-kmsave/Pods-kmsave.release.xcconfig"; sourceTree = "<group>"; };
@@ -43,8 +57,29 @@
 			isa = PBXGroup;
 			children = (
 				A100000006 /* MapView.swift */,
+				A100000021 /* RouteSelectionView.swift */,
+				A100000023 /* NavigationView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		A1FFFFA002 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A100000011 /* LocationManager.swift */,
+				A100000015 /* DirectionsService.swift */,
+				A100000017 /* NavigationEngine.swift */,
+				A100000019 /* VoiceGuidanceService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A1FFFFA003 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A100000013 /* NavigationModels.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		A1FFFFFB01 /* Products */ = {
@@ -61,6 +96,8 @@
 				A100000002 /* kmsaveApp.swift */,
 				A100000004 /* ContentView.swift */,
 				A1FFFFA001 /* Views */,
+				A1FFFFA002 /* Services */,
+				A1FFFFA003 /* Models */,
 				A100000008 /* Assets.xcassets */,
 				A100000009 /* Info.plist */,
 			);
@@ -211,6 +248,13 @@
 				A100000001 /* kmsaveApp.swift in Sources */,
 				A100000003 /* ContentView.swift in Sources */,
 				A100000005 /* MapView.swift in Sources */,
+				A100000010 /* LocationManager.swift in Sources */,
+				A100000012 /* NavigationModels.swift in Sources */,
+				A100000014 /* DirectionsService.swift in Sources */,
+				A100000016 /* NavigationEngine.swift in Sources */,
+				A100000018 /* VoiceGuidanceService.swift in Sources */,
+				A100000020 /* RouteSelectionView.swift in Sources */,
+				A100000022 /* NavigationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

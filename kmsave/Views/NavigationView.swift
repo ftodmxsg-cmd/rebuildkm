@@ -3,19 +3,18 @@ import CoreLocation
 import GoogleMaps
 
 /// Main navigation view with turn-by-turn guidance
-struct NavigationView: View {
+struct ActiveNavigationView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var navigationEngine: NavigationEngine
-    @State private var voiceGuidance: VoiceGuidanceService
-    let locationManager: LocationManager
+    @StateObject private var navigationEngine: NavigationEngine
+    @StateObject private var voiceGuidance = VoiceGuidanceService()
+    @ObservedObject var locationManager: LocationManager
     
     @State private var isNavigating = false
     @State private var showingExitConfirmation = false
     
     init(route: Route, locationManager: LocationManager) {
         self.locationManager = locationManager
-        _navigationEngine = State(initialValue: NavigationEngine(route: route))
-        _voiceGuidance = State(initialValue: VoiceGuidanceService())
+        _navigationEngine = StateObject(wrappedValue: NavigationEngine(route: route))
     }
     
     var body: some View {
@@ -318,8 +317,8 @@ struct NavigationMapView: UIViewRepresentable {
         }
         
         // Highlight upcoming turn
-        if let nextTurnIndex = navigationState.currentStepIndex + 1,
-           nextTurnIndex < route.steps.count {
+        let nextTurnIndex = navigationState.currentStepIndex + 1
+        if nextTurnIndex < route.steps.count {
             let nextStep = route.steps[nextTurnIndex]
             let marker = GMSMarker()
             marker.position = nextStep.startLocation.clCoordinate
@@ -331,7 +330,7 @@ struct NavigationMapView: UIViewRepresentable {
 
 // MARK: - Preview
 
-struct NavigationView_Previews: PreviewProvider {
+struct ActiveNavigationView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleRoute = Route(
             summary: "Sample Route",
@@ -345,7 +344,7 @@ struct NavigationView_Previews: PreviewProvider {
             )
         )
         
-        NavigationView(route: sampleRoute, locationManager: LocationManager())
+        ActiveNavigationView(route: sampleRoute, locationManager: LocationManager())
     }
 }
 

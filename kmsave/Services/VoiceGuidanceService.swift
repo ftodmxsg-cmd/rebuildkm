@@ -1,12 +1,13 @@
 import Foundation
 import AVFoundation
+import Combine
 
 /// Service for providing voice guidance during navigation
-class VoiceGuidanceService: NSObject, AVSpeechSynthesizerDelegate {
+class VoiceGuidanceService: NSObject, ObservableObject, AVSpeechSynthesizerDelegate {
     // MARK: - Properties
     private let synthesizer = AVSpeechSynthesizer()
-    private var isEnabled = true
-    private var isSpeaking = false
+    @Published var isEnabled = true
+    @Published var isSpeaking = false
     
     // MARK: - Initialization
     override init() {
